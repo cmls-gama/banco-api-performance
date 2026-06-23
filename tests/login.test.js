@@ -1,5 +1,6 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
+const postLogin =JSON.parse(open('../fixtures/postLogin.json'))
 
 export const options = {
   stages:[
@@ -8,6 +9,7 @@ export const options = {
     {duration: '10s', target:30},//durante mais 10s coloque 30 usuários virtuais
     {duration: '20s', target:0},//nos 20 segundos finais devem zerar os usuários virtuais
   ],
+
   thresholds: {
     http_req_duration: ['p(90)<3000','max<5000'], //percentil 90 TEM QUE SER menor que 10 milisegundos e o max menor que 1
     http_req_failed: ['rate<0.01'] 
@@ -18,10 +20,11 @@ export const options = {
     // Aqui é o teste em si
     const url = 'http://localhost:3000/login';
 
-    const payload = JSON.stringify({
-        username: 'julio.lima',
-        senha: '123456',
-    });
+    postLogin.username = "junior.lima"
+
+    console.log(postLogin)
+
+    const payload = JSON.stringify(postLogin);
 
     const params = {
         headers: {
